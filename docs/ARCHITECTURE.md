@@ -1,6 +1,6 @@
-# UMA Server Architecture
+# SINA People Server Architecture
 
-This document outlines the backend architecture of the UMA project. It is designed for **Architects**, **Backend Engineers**, and **Security Auditors**.
+This document outlines the backend architecture of the SINA People project. It is designed for **Architects**, **Backend Engineers**, and **Security Auditors**.
 
 ## High-Level Flow
 

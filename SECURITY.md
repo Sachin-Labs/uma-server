@@ -20,4 +20,4 @@ Please include the following in your report:
 
 We will acknowledgment your report within 48 hours and provide a timeline for the fix.
 
-Thank you for helping keep the UMA project secure!
+Thank you for helping keep the SINA People project secure!

@@ -192,16 +192,6 @@ class UserService {
 
         return { message: 'Invite resent.' };
     }
-
-    async resetPassword(userId, organisationId, newPassword) {
-        const user = await User.findOne({ _id: userId, organisationId }).select('+password');
-        if (!user) throw new AppError('User not found.', 404);
-
-        user.password = newPassword;
-        await user.save();
-
-        return { message: 'Password reset successfully.' };
-    }
 }
 
 module.exports = new UserService();

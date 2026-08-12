@@ -1,11 +1,11 @@
-# UMA Backend — User Management & Attendance System API
+# SINA People Backend — User Management & Attendance System API
 
-UMA (User Management & Attendance System) is a robust, production-ready Node.js + Express backend designed for the Multi-Tenant UMA platform.
+SINA People (User Management & Attendance System) is a robust, production-ready Node.js + Express backend designed for the Multi-Tenant SINA People platform.
 
 ---
 
 ## 🚀 Live Demo
-- **Backend API URL:** [https://uma-server.onrender.com](https://uma-server.onrender.com) *(Replace with your URL)*
+- **Backend API URL:** [https://sina-people-server.onrender.com](https://sina-people-server.onrender.com) *(Replace with your URL)*
 
 ---
 
@@ -66,7 +66,7 @@ npm run dev
 | `JWT_ACCESS_SECRET` | Secret key for access tokens | - |
 | `JWT_REFRESH_SECRET`| Secret key for refresh tokens | - |
 | `EMAIL_PROVIDER` | `console`, `ethereal`, or `smtp` | `console` |
-| `EMAIL_FROM` | Sender email address | `noreply@uma.com` |
+| `EMAIL_FROM` | Sender email address | `noreply@sina-people.com` |
 | `CLIENT_URL` | Frontend application URL | `http://localhost:5173` |
 
 ---

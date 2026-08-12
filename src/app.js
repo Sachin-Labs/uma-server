@@ -43,7 +43,7 @@ app.use('/api', apiLimiter);
 
 // Health check
 app.get('/api/health', (req, res) => {
-    res.json({ success: true, message: 'UMA API is running', timestamp: new Date().toISOString() });
+    res.json({ success: true, message: 'SINA People API is running', timestamp: new Date().toISOString() });
 });
 
 // Routes
