@@ -2,6 +2,7 @@ const Attendance = require('../models/Attendance');
 const Team = require('../models/Team');
 const User = require('../models/User');
 const Leave = require('../models/Leave');
+const Holiday = require('../models/Holiday');
 const { haversineDistance } = require('../utils/haversine');
 const { createAuditLog } = require('../utils/auditLogger');
 const AppError = require('../utils/AppError');
@@ -15,7 +16,13 @@ class AttendanceService {
     async checkIn(organisationId, userId, { lat, lng, workType }) {
         const today = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
 
-        // 1. Check for approved leave
+        // 1. Check for company holiday
+        const holiday = await Holiday.findOne({ organisationId, date: today });
+        if (holiday) {
+            throw new AppError(`Company holiday — ${holiday.title}. No check-in required.`, 400);
+        }
+
+        // 2. Check for approved leave
         const leave = await Leave.findOne({
             organisationId,
             userId,
@@ -27,13 +34,13 @@ class AttendanceService {
             throw new AppError('Cannot check in — you have approved leave today.', 400);
         }
 
-        // 2. Check for duplicate check-in (also caught by unique index)
+        // 3. Check for duplicate check-in (also caught by unique index)
         const existing = await Attendance.findOne({ organisationId, userId, date: today });
         if (existing) {
             throw new AppError('Already checked in today.', 400);
         }
 
-        // 3. Get user and team
+        // 4. Get user and team
         const user = await User.findById(userId);
         if (!user || !user.teamId) {
             throw new AppError('User has no assigned team.', 400);
@@ -44,14 +51,14 @@ class AttendanceService {
             throw new AppError('Team not found.', 404);
         }
 
-        // 4. Determine effective work mode
+        // 5. Determine effective work mode
         const effectiveWorkMode = user.workModeOverride || team.workMode;
 
         let resolvedWorkType = workType;
         let distance = null;
         let locationValidated = false;
 
-        // 5. Apply geo-fencing logic
+        // 6. Apply geo-fencing logic
         if (effectiveWorkMode === WORK_MODES.ONSITE) {
             resolvedWorkType = WORK_TYPES.OFFICE;
             if (!lat || !lng) {
@@ -89,7 +96,7 @@ class AttendanceService {
             }
         }
 
-        // 6. Check WFH limit
+        // 7. Check WFH limit
         if (resolvedWorkType === WORK_TYPES.WFH) {
             const monthStart = today.substring(0, 7) + '-01';
             const monthEnd = today.substring(0, 7) + '-31';
@@ -109,7 +116,7 @@ class AttendanceService {
             }
         }
 
-        // 7. Calculate status (PRESENT or LATE)
+        // 8. Calculate status (PRESENT or LATE)
         const now = new Date();
         const [officeHour, officeMin] = env.OFFICE_START_TIME.split(':').map(Number);
         const officeStart = new Date(now);
@@ -117,7 +124,7 @@ class AttendanceService {
 
         const status = now > officeStart ? ATTENDANCE_STATUS.LATE : ATTENDANCE_STATUS.PRESENT;
 
-        // 8. Create attendance
+        // 9. Create attendance
         const attendance = await Attendance.create({
             organisationId,
             userId,

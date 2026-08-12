@@ -1,5 +1,6 @@
 const ExcelJS = require('exceljs');
 const Attendance = require('../models/Attendance');
+const Holiday = require('../models/Holiday');
 
 class ReportService {
     /**
@@ -22,7 +23,7 @@ class ReportService {
             .lean();
 
         const workbook = new ExcelJS.Workbook();
-        workbook.creator = 'UMA';
+        workbook.creator = 'SINA People';
         workbook.created = new Date();
 
         const sheet = workbook.addWorksheet('Attendance Report');
@@ -72,9 +73,46 @@ class ReportService {
             });
         }
 
+        await this._attachHolidaysSheet(workbook, organisationId, { startDate, endDate });
+
         // Generate buffer
         const buffer = await workbook.xlsx.writeBuffer();
         return buffer;
+    }
+
+    /**
+     * Build a holiday worksheet on the report for the given date range.
+     */
+    async _attachHolidaysSheet(workbook, organisationId, { startDate, endDate }) {
+        const query = { organisationId };
+        if (startDate || endDate) {
+            query.date = {};
+            if (startDate) query.date.$gte = startDate;
+            if (endDate) query.date.$lte = endDate;
+        }
+
+        const holidays = await Holiday.find(query).sort({ date: 1 }).lean();
+
+        const sheet = workbook.addWorksheet('Holidays');
+        sheet.columns = [
+            { header: 'Date', key: 'date', width: 15 },
+            { header: 'Title', key: 'title', width: 35 },
+        ];
+
+        sheet.getRow(1).font = { bold: true, color: { argb: 'FFFFFFFF' } };
+        sheet.getRow(1).fill = {
+            type: 'pattern',
+            pattern: 'solid',
+            fgColor: { argb: 'FF1E3A5F' },
+        };
+
+        if (holidays.length === 0) {
+            sheet.addRow({ date: '(no holidays in range)', title: '' });
+        } else {
+            for (const holiday of holidays) {
+                sheet.addRow({ date: holiday.date, title: holiday.title });
+            }
+        }
     }
 }
 

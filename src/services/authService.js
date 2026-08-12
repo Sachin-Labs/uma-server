@@ -6,7 +6,9 @@ const { createAuditLog } = require('../utils/auditLogger');
 const AppError = require('../utils/AppError');
 const emailService = require('../emails/emailService');
 const bcrypt = require('bcryptjs');
+const crypto = require('crypto');
 const { ROLES, SUBSCRIPTION_PLANS } = require('../config/constants');
+const env = require('../config/env');
 
 class AuthService {
     /**
@@ -256,6 +258,77 @@ class AuthService {
         await user.save();
 
         // Auto-login after setting password
+        const tokenPayload = {
+            userId: user._id,
+            organisationId: user.organisationId,
+            role: user.role,
+        };
+
+        const accessToken = generateAccessToken(tokenPayload);
+        const refreshToken = generateRefreshToken(tokenPayload);
+
+        user.refreshToken = refreshToken;
+        await User.updateOne({ _id: user._id }, { refreshToken });
+
+        return {
+            user: {
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                role: user.role,
+                organisationId: user.organisationId,
+            },
+            accessToken,
+            refreshToken,
+        };
+    }
+
+    /**
+     * Request a password reset link (public, no auth needed).
+     * Always resolves successfully to avoid leaking whether an email is registered.
+     */
+    async requestPasswordReset({ email }) {
+        const user = await User.findOne({ email }).select('+resetToken');
+        if (!user) {
+            return { message: 'If that email is registered, a reset link has been sent.' };
+        }
+
+        const resetToken = crypto.randomBytes(32).toString('hex');
+        user.resetToken = resetToken;
+        user.resetTokenExpiry = new Date(Date.now() + 60 * 60 * 1000); // 1 hour
+        await user.save();
+
+        const resetLink = `${env.CLIENT_URL}/reset-password/${resetToken}`;
+        await emailService.sendPasswordReset({ to: user.email, resetLink });
+
+        return { message: 'If that email is registered, a reset link has been sent.' };
+    }
+
+    /**
+     * Set a new password from a reset token (public, no auth needed), then auto-login.
+     */
+    async setPasswordFromReset({ token, password }) {
+        if (!token || !password) {
+            throw new AppError('Token and password are required.', 400);
+        }
+        if (password.length < 6) {
+            throw new AppError('Password must be at least 6 characters.', 400);
+        }
+
+        const user = await User.findOne({
+            resetToken: token,
+            resetTokenExpiry: { $gt: new Date() },
+        }).select('+resetToken +password');
+
+        if (!user) {
+            throw new AppError('Invalid or expired reset link. Please request a new one.', 400);
+        }
+
+        user.password = password; // pre-save hook will hash it
+        user.resetToken = null;
+        user.resetTokenExpiry = null;
+        await user.save();
+
         const tokenPayload = {
             userId: user._id,
             organisationId: user.organisationId,

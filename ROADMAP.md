@@ -1,6 +1,6 @@
-# UMA Server Roadmap 🗺️
+# SINA People Server Roadmap 🗺️
 
-This document outlines the vision for the UMA Backend. Whether you are an **Architect** thinking about scale or a **Backend Contributor** looking for a task, this is the place to look.
+This document outlines the vision for the SINA People Backend. Whether you are an **Architect** thinking about scale or a **Backend Contributor** looking for a task, this is the place to look.
 
 ## Phase 1: Core Systems (Current)
 - [x] Multi-tenant data isolation.
@@ -23,4 +23,4 @@ This document outlines the vision for the UMA Backend. Whether you are an **Arch
 
 ---
 **Product Manager's Tip:**
-Phase 2 features are designed for "Service Stability." If you are interested in scalability, please see the [ISSUES.md](file:///Users/sachinbalagam/Personal/UMA/server/docs/ISSUES.md) list.
+Phase 2 features are designed for "Service Stability." If you are interested in scalability, please see the [ISSUES.md](file:///Users/sachinbalagam/Personal/SINA%20People/server/docs/ISSUES.md) list.

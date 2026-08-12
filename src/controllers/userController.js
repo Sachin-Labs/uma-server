@@ -65,13 +65,4 @@ const resendInvite = async (req, res, next) => {
     }
 };
 
-const resetPassword = async (req, res, next) => {
-    try {
-        const result = await userService.resetPassword(req.user.userId, req.user.organisationId, req.body.newPassword);
-        res.json({ success: true, ...result });
-    } catch (error) {
-        next(error);
-    }
-};
-
-module.exports = { create, list, getById, update, deactivate, reactivate, resendInvite, resetPassword };
+module.exports = { create, list, getById, update, deactivate, reactivate, resendInvite };

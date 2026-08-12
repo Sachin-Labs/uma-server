@@ -1,4 +1,4 @@
-# UMA Backend API Documentation 📡
+# SINA People Backend API Documentation 📡
 
 All requests should be made to the base URL: `http://localhost:5000` (Development).
 All endpoints are prefixed with `/api`.

@@ -1,6 +1,6 @@
-# UMA Server: Guided Issues 🚀
+# SINA People Server: Guided Issues 🚀
 
-This is a reference list of issues for the UMA Backend API. Use these to find a task that matches your skill level.
+This is a reference list of issues for the SINA People Backend API. Use these to find a task that matches your skill level.
 
 ## 🟢 Beginner (Good First Issues)
 1. **[DX] Add JSDoc to Controllers**: Add clear JSDoc comments to all functions in `src/controllers/auth.controller.js`.
