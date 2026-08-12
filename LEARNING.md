@@ -1,6 +1,6 @@
-# UMA Learning Lab: Backend Edition 🧠
+# SINA People Learning Lab: Backend Edition 🧠
 
-Welcome to the UMA Backend Learning Lab! This document is designed for **Students** and **Junior Backend Developers** to help you understand the architectural "Why" behind the "What".
+Welcome to the SINA People Backend Learning Lab! This document is designed for **Students** and **Junior Backend Developers** to help you understand the architectural "Why" behind the "What".
 
 ## 🔐 Security & Auth
 1. **The Secret**: Why do we store the `JWT_ACCESS_SECRET` in a `.env` file instead of directly in the code? *Search for "Environment Variables and Security".*

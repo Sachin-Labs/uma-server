@@ -1,5 +1,5 @@
 {
-  "name": "uma-server",
+  "name": "sina-people-server",
   "version": "1.0.0",
   "description": "Multi-tenant User Management & Attendance System SaaS - Backend",
   "main": "src/server.js",

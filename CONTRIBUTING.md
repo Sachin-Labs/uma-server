@@ -1,6 +1,6 @@
-# Contributing to UMA Backend
+# Contributing to SINA People Backend
 
-Thank you for your interest in contributing to the UMA API! We appreciate your help in building a robust and secure attendance management system.
+Thank you for your interest in contributing to the SINA People API! We appreciate your help in building a robust and secure attendance management system.
 
 ## 🚀 Simple Steps to Contribute
 
@@ -33,4 +33,4 @@ We welcome help with:
 - **Documentation**: Update the relevant `README.md` or comments if you change environment variables or logic flow.
 - **Security First**: Never commit private keys, real API secrets, or `.env` files.
 
-Thank you for contributing to UMA! ❤️
+Thank you for contributing to SINA People! ❤️

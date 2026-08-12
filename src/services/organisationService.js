@@ -9,7 +9,7 @@ class OrganisationService {
     }
 
     async updateOrganisation(organisationId, updates) {
-        const allowed = ['name', 'subscriptionPlan', 'subscriptionExpiry', 'officeLocation', 'officeHours'];
+        const allowed = ['name', 'officeLocation', 'officeHours'];
         const filteredUpdates = {};
         for (const key of allowed) {
             if (updates[key] !== undefined) filteredUpdates[key] = updates[key];
